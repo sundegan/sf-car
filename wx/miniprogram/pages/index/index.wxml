@@ -16,8 +16,8 @@
       bindtap="myLocationTap"
     ></cover-image>
     <!-- TODO:当点击用户头像时，跳转到我的行程列表页面 -->
-    <cover-image wx:if="{{!avatarURL}}" src="/resources/account.png" bindtap="onMyTripsTap"></cover-image>
-    <cover-image wx:if="{{avatarURL}}" src="{{avatarURL}}" class="round" bindtap="onMyTripsTap"></cover-image>
+    <cover-image wx:if="{{!avatarUrl}}" src="/resources/account.png" bindtap="onMyTripsTap"></cover-image>
+    <cover-image wx:if="{{avatarUrl}}" src="{{avatarUrl}}" class="round" bindtap="onMyTripsTap"></cover-image>
   </cover-view>
 
   <!-- 扫描二维码租车控件 -->

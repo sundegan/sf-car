@@ -12,7 +12,7 @@ Page({
   },
 
   data: {
-    avatarURL: '',  // 用户头像链接
+    avatarUrl: '',  // 用户头像链接
 
     // map组件设置数据
     setting: {
@@ -69,7 +69,7 @@ Page({
     }) 
   },
 
-  // 每次加载首页时，获取当前位置信息以及从全局变量获取头像链接
+  // 每次加载首页时，获取当前位置信息以及从本地缓存获取头像链接
   async onLoad() {
     wx.getLocation({
       type: 'gcj02',
@@ -89,9 +89,9 @@ Page({
       }
     }) 
     
-    const userInfo = await getApp().globalData.userInfo
+    const avatarUrl = wx.getStorageSync('avatarUrl')
     this.setData({
-      avatarURL: userInfo.avatarUrl,
+      avatarUrl: avatarUrl,
     })
   },
 

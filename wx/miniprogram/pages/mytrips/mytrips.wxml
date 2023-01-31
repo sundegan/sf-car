@@ -19,12 +19,12 @@
     <view class="avatar-container margin-top margin-right-xl">
         <view class="text-xl mytrips-heading">我的行程</view>
         <view class="avatar margin-right">
-            <button wx:if="{{!avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
+            <button wx:if="{{!avatarUrl}}" class="cu-avatar round lg bg-grey margin-xs"
                 open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
                 <text class="cuIcon-people"></text>
             </button>
-            <image wx:if="{{avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
-                src="{{avatarURL}}"/>
+            <image wx:if="{{avatarUrl}}" class="cu-avatar round lg bg-grey margin-xs"
+                src="{{avatarUrl}}"/>
         </view>
         <view class="text-blue" bindtap="onRegisterTap">驾驶资格{{licStatus}}</view>
     </view>

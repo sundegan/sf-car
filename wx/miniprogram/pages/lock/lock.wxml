@@ -11,14 +11,14 @@
     <!-- 获取用户头像 -->
     <view class="avatar-container">
         <!-- 如果没获取过,则请求获取 -->
-        <button wx:if="{{!avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
+        <button wx:if="{{!avatarUrl}}" class="cu-avatar round lg bg-grey margin-xs"
             open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
             <text class="cuIcon-people"></text>
         </button>
         <!-- 获取过,则显示头像 -->
-        <view wx:if="{{avatarURL}}" class="switch-container">
+        <view wx:if="{{avatarUrl}}" class="switch-container">
             <image class="cu-avatar round lg bg-grey margin-xs" 
-            src="{{avatarURL}}"/>
+            src="{{avatarUrl}}"/>
             <!-- 选择是否进行位置共享 -->
             <switch bindchange="onShareLocation" checked="{{shareLocation}}"/>
         </view>

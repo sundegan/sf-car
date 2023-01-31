@@ -50,7 +50,7 @@ Page({
     mainItems: [] as MainItemQueryResult[] 
   },
   data: {
-    avatarURL: '',
+    avatarUrl: '',
     mainItems: [] as MainItem[],
     navItems: [] as NavItem[],
     mainScroll: '',
@@ -83,9 +83,9 @@ Page({
 
   async onLoad() {
     this.populateTrips()  // 生成随机行程数据
-    const userInfo = await getApp().globalData.userInfo
+    const avatarUrl = wx.getStorageSync('avatarUrl')
     this.setData({
-      avatarURL: userInfo.avatarUrl,
+      avatarUrl: avatarUrl,
     })
   },
 
@@ -174,10 +174,10 @@ Page({
   // 获取用户头像
   onChooseAvatar(e: any) {
     this.setData({
-      avatarURL: e.detail.avatarUrl,
+      avatarUrl: e.detail.avatarUrl,
     }),
-    // 将获取的avatarUrl保存到全局变量中
-    getApp().globalData.userInfo.avatarUrl = e.detail.avatarUrl
+    // 将获取的avatarUrl保存到本地缓存
+    wx.setStorageSync('avatarUrl', e.detail.avatarUrl)
   },
 
   // 跳转到注册页面

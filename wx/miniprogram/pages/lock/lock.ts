@@ -9,22 +9,21 @@ Page({
   carID: undefined as undefined | string,
 
   data: {
-    avatarURL: '',        // 用户头像URL
+    avatarUrl: '',        // 用户头像URL
     shareLocation: false, // 是否共享我的位置
   },
 
   // 每次登录从本地缓存读取shareLocationKey
-  // 从全局变量userInfo读取avatarUrl
+  // 从本地缓存读取avatarUrl
   // 从index页面获取扫码的carID
   async onLoad(opt: Record<'car_id', string>) {
     const o: routing.LockOpts = opt
     // 从扫码页面获取传递过来的carID
     console.log('unlocking car', o.car_id)
     this.carID = o.car_id
-    const userInfo = await getApp().globalData.userInfo
-    wx.getStorageSync(shareLocationKey)
+    const avatarUrl = wx.getStorageSync('avatarUrl')
     this.setData({
-      avatarURL: userInfo.avatarUrl,
+      avatarUrl: avatarUrl,
       shareLocation: wx.getStorageSync(shareLocationKey) || false,
     })
   },
@@ -32,10 +31,10 @@ Page({
   // 获取用户头像用于在地图上向别人实时分享我的位置
   onChooseAvatar(e: any) {
     this.setData({
-      avatarURL: e.detail.avatarUrl,
+      avatarUrl: e.detail.avatarUrl,
     }),
-    // 将获取的avatarUrl保存到全局变量中，需要在app.ts中定义相应的全局变量
-    getApp().globalData.userInfo.avatarUrl = e.detail.avatarUrl
+    // 将获取的avatarUrl保存到本地缓存中
+    wx.setStorageSync('avatarUrl', e.detail.avatarUrl)
   },
 
   // 打开/关闭位置共享
@@ -58,8 +57,8 @@ Page({
             longitude: res.longitude,
           },
           // TODO: 需要双向绑定
-          avatarURL: this.data.shareLocation 
-            ? this.data.avatarURL: '',
+          avatarUrl: this.data.shareLocation 
+            ? this.data.avatarUrl: '',
         })
       },
       fail: () => {
