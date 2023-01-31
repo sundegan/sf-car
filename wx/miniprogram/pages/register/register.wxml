@@ -1,0 +1,58 @@
+<view class="container padding-top-xl">
+    <!-- 当没有上传过驾驶证照片显示上传驾驶证照片操作 -->
+    <view class="lic-tmpl" wx:if="{{!licImgURL}}" bindtap="onUploadLic">
+        <image src="/resources/lic-model.png" class="lic-model"/>
+        <view class="cuIcon-camerafill lg text-gray"></view>
+        <view class="instruction">请上传驾驶证照片</view>
+    </view>
+
+    <!-- 上传过驾驶证照片则显示驾驶证照片和注册信息 -->
+    <!-- TODO: 审核通过后在图片上打钩 -->
+    <block wx:else>
+        <view class="lic-tmpl">
+            <image class="stretch" src="{{licImgURL}}"/>
+        </view>
+
+        <!-- 注册表单 -->
+        <form class="lic-form  margin-top-xl">
+            <view class="cu-form-group">
+                <view class="title">姓名</view>
+                <input placeholder="姓名" value="{{name}}" disabled="{{auditState!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">性别</view>
+                <input placeholder="性别" value="{{gender}}" disabled="{{auditState!=='UNSUBMITTED'}}"/> 
+            </view>
+            <view class="cu-form-group">
+                <view class="title">驾驶证号</view>
+                <input placeholder="驾驶证号" value="{{licID}}" disabled="{{auditState!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">手机号码</view>
+                <input placeholder="手机号码" value="{{phone}}" disabled="{{auditState!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">出生日期</view>
+                <picker bindchange="onDateChange" mode="date" value="{{date}}" disabled="{{auditState!=='UNSUBMITTED'}}">
+                    <view class="picker">
+                        {{date}}
+                    </view>
+                </picker>
+            </view>
+            <button wx:if="{{auditState ==='UNSUBMITTED'}}" 
+                class="cu-btn block bg-blue margin-top-xl lg"
+                bindtap="onSubmit">
+                提交审核
+            </button>
+            <button wx:if="{{auditState ==='PENDING'}}"
+                class="cu-btn block line-blue margin-top-xl lg" disabled>
+                正在审核中
+            </button>
+            <button wx:if="{{auditState ==='VERIFIED'}}"
+                class="cu-btn block bg-blue margin-top-xl lg"
+                bindtap="onResubmit">
+                重新审核
+            </button>
+        </form> 
+    </block>
+</view>

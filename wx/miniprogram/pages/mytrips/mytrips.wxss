@@ -1,0 +1,74 @@
+/* 轮播组件宽度和高度 */
+swiper {
+    width: 750rpx;
+    height: 306rpx;
+}
+
+/* 图片撑满swiper组件 */
+.swiper-image {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.detail-row {
+    display: flex;
+}
+
+/* 圆角 */
+.trip {
+    border-radius: 25rpx;
+}
+
+.fee {
+    font-style: italic;
+}
+
+.trip-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mytrips-heading {
+    position: absolute;
+    left: 50rpx;
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* 左边垂直导航栏横向排布 */
+.nav-container {
+    display: flex;
+}
+
+/* 左边导航栏宽度 */
+.nav-container swiper {
+    width: 200rpx;
+}
+
+.nav .cu-item {
+    margin: unset;
+    padding: unset;
+    text-align: center;
+}
+
+.cur {
+    width: 8rpx;
+    border-radius: 10rpx 0 0 10rpx;
+    position: absolute;
+    background-color: currentColor;
+    top: 0;
+    right: 0rpx;
+    bottom: 0;
+    margin: auto;
+}
+
+.in-progress {
+    font-style: italic;
+}

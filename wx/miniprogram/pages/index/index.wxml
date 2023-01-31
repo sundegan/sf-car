@@ -1,0 +1,27 @@
+<!-- 微信原生地图组件 -->
+<map 
+  id="map"
+  latitude="{{location.latitude}}"
+  longitude="{{location.longitude}}"
+  scale="{{scale}}"
+  setting="{{setting}}"
+  enable-overlooking="{{isOverLooking}}"
+  enable-3D="{{is3D}}"
+  markers="{{markers}}"
+>
+  <!-- 添加定位控件和用户头像控件 -->
+  <cover-view class="icon-container">
+    <cover-image 
+      src="/resources/location.png"
+      bindtap="myLocationTap"
+    ></cover-image>
+    <!-- TODO:当点击用户头像时，跳转到我的行程列表页面 -->
+    <cover-image wx:if="{{!avatarURL}}" src="/resources/account.png" bindtap="onMyTripsTap"></cover-image>
+    <cover-image wx:if="{{avatarURL}}" src="{{avatarURL}}" class="round" bindtap="onMyTripsTap"></cover-image>
+  </cover-view>
+
+  <!-- 扫描二维码租车控件 -->
+  <cover-view class="scanQRcodes-container bg-grey round" bindtap="onScanQRcodes">
+    <cover-view>扫码租车</cover-view>
+  </cover-view>
+</map>

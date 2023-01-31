@@ -1,0 +1,28 @@
+<view class="container">
+    <!-- 静态页面 -->
+    <view class="static">
+        <image class="sedan" src="/resources/sedan.png"/>
+        <view class="margin-top">
+            <view>驾驶安全是用户的责任</view>
+            <view>请将车辆停放在停车位内</view>
+        </view>
+    </view>
+
+    <!-- 获取用户头像 -->
+    <view class="avatar-container">
+        <!-- 如果没获取过,则请求获取 -->
+        <button wx:if="{{!avatarURL}}" class="cu-avatar round lg bg-grey margin-xs"
+            open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <text class="cuIcon-people"></text>
+        </button>
+        <!-- 获取过,则显示头像 -->
+        <view wx:if="{{avatarURL}}" class="switch-container">
+            <image class="cu-avatar round lg bg-grey margin-xs" 
+            src="{{avatarURL}}"/>
+            <!-- 选择是否进行位置共享 -->
+            <switch bindchange="onShareLocation" checked="{{shareLocation}}"/>
+        </view>
+        <view class="margin-top">在地图上共享我的位置</view> 
+    </view>
+    <button class="bg-grey lg" style="width:80%" bindtap="onUnlockTap">立即开锁</button>
+</view>
