@@ -1,0 +1,16 @@
+type: google.api.Service
+config_version: 3
+
+# http:
+#   rules:
+#     # Selects a gRPC method and applies HttpRule to it.
+#     - selector: example.v1.Messaging.GetMessage
+#       get: /v1/messages/{message_id}/{sub.subfield}
+
+
+http:
+  rules:
+    # 选择一个gRPC方法应用HttpRule映射规则
+    # 将helloworld包中的Greeter服务中的SayHello方法映射为/helloworld
+    - selector: helloworld.Greeter.SayHello
+      get: /helloworld/greeter/sayhello
