@@ -1,3 +1,5 @@
+import { IAppOption } from "./appoption"
+
 // app.ts
 App<IAppOption>({
   globalData: {
@@ -14,6 +16,13 @@ App<IAppOption>({
   },
 
   onLaunch() {
+    // 测试GRPC-Gateway服务
+    wx.request({
+      url: 'http://localhost:8080/helloworld/greeter/sayhello',
+      method: 'GET',
+      success: console.log,
+      fail: console.error
+    })
     // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())

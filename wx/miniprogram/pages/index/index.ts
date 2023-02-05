@@ -134,7 +134,7 @@ Page({
   // 扫码租车处理函数
   onScanQRcodes() {
     wx.scanCode({
-      success: res => {
+      success: () => {
         wx.showModal({
           title: '身份认证',
           content: '需要身份认证才能租车',
@@ -158,7 +158,7 @@ Page({
   
       fail: () => {
         wx.showToast({
-          icon: 'error',
+          icon: 'none',
           title: '扫码失败!',
         })
       }

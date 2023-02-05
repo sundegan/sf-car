@@ -55,7 +55,7 @@ func startGrpcGateway() {
 		ctx,
 		mux,
 		"localhost:8081", // GRPC服务的地址
-		opts,              // 连接配置，只能是切片
+		opts,             // 连接配置，只能是切片
 	)
 	if err != nil {
 		fmt.Println(err)

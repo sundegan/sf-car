@@ -4,7 +4,7 @@
     "ignore": [],
     "include": []
   },
-  "miniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "",
   "compileType": "miniprogram",
   "projectname": "ts-demo",
   "setting": {
