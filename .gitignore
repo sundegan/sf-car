@@ -1,0 +1,27 @@
+# 二进制程序和插件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+.DS_Store
+*/.DS_Store
+
+# 由go test -c编译测试文件形成的可执行文件
+*.test
+
+# go覆盖率测试文件
+*.out
+
+
+**/.idea
+.vscode
+*.code-workspace
+_debug_bin
+
+**/wx/miniprogram/**/*.js
+!/wx/miniprogram/service/proto_gen/*.js
+**/wx/miniprogram/miniprogram_npm/*
+**/wx/miniprogram/node_modules/*
+
+
