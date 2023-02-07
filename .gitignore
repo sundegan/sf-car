@@ -20,8 +20,6 @@
 _debug_bin
 
 **/wx/miniprogram/**/*.js
-!/wx/miniprogram/service/proto_gen/*.js
+!**/wx/miniprogram/service/proto_gen/**/*.js
 **/wx/miniprogram/miniprogram_npm/*
 **/wx/miniprogram/node_modules/*
-
-

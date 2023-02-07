@@ -8,5 +8,9 @@
   "license": "",
   "devDependencies": {
     "miniprogram-api-typings": "^2.12.0"
+  },
+  "dependencies": {
+    "camelcase-keys": "^6.2.2",
+    "protobufjs": "^7.2.1"
   }
 }
