@@ -3,19 +3,24 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"io"
 	"log"
 	"net"
+	"os"
 	authpb "sfcar/auth/api/gen/v1"
 	"sfcar/auth/auth"
 	"sfcar/auth/dao"
+	"sfcar/auth/token"
 	"sfcar/auth/wechat"
+	"time"
 )
 
-// 将auth服务注册到GRPC并启动auth GRPC服务
+// Register the auth service with GRPC and start the auth GRPC service.
 func main() {
 	fmt.Println("start GRPC server...")
 	logger, err := zap.NewDevelopment()
@@ -34,14 +39,45 @@ func main() {
 		logger.Fatal("connect to mondodb failed: %v", zap.Error(err))
 	}
 
+	// Get the appsecret from the local file.
+	appSecretFile, err := os.Open("auth/appsecret.txt")
+	if err != nil {
+		logger.Fatal("cannot open appsecret.txt file", zap.Error(err))
+	}
+	appSecretBytes, err := io.ReadAll(appSecretFile)
+	if err != nil {
+		logger.Fatal("cannot read appsecret.txt file", zap.Error(err))
+	}
+	appSecret := string(appSecretBytes)
+
+	// Get the private key from the local file.
+	keyFile, err := os.Open("auth/private.key")
+	if err != nil {
+		logger.Fatal("cannot open private key file", zap.Error(err))
+	}
+	keyBytes, err := io.ReadAll(keyFile)
+	if err != nil {
+		logger.Fatal("cannot read private key file", zap.Error(err))
+	}
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(keyBytes)
+	if err != nil {
+		log.Fatalf("cannot parse private key: %v", err)
+	}
+
 	s := grpc.NewServer()
 	authpb.RegisterAuthServiceServer(s, &auth.Service{
 		OpenIDResolver: &wechat.Service{
 			AppID:     "wx2574ac10292f87b5",
-			AppSecret: "176988fabd721c57829111c9d22a6199",
+			AppSecret: appSecret,
 		},
 		Mongo:  dao.NewMongo(mongoClient.Database("sfcar")),
 		Logger: logger,
+		TokenGenerator: &token.JWTTokenGen{
+			PrivateKey: privateKey,
+			Issuer:     "sfcar/auth",
+			IssuedAt:   time.Unix(1516239022, 0),
+		},
+		TokenExpire: 2 * time.Hour,
 	})
 
 	err = s.Serve(lis)
