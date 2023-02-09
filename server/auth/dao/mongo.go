@@ -11,13 +11,15 @@ import (
 
 // Mongo defines a mongo dao.
 type Mongo struct {
-	col *mongo.Collection
+	col   *mongo.Collection
+	objID primitive.ObjectID
 }
 
 // NewMongo is used by external packages to initialize Mongo structs.
 func NewMongo(db *mongo.Database) *Mongo {
 	return &Mongo{
-		col: db.Collection("account"),
+		col:   db.Collection("account"),
+		objID: primitive.ObjectID{},
 	}
 }
 
@@ -29,7 +31,7 @@ func (m *Mongo) ResolveAccountID(ctx context.Context, openID string) (string, er
 	}
 	update := bson.M{
 		"$setOnInsert": bson.M{
-			"_id":     "63e26d0625d9b723e3f819ad",
+			"_id":     m.objID,
 			"open_id": openID,
 		},
 	}

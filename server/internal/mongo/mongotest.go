@@ -1,4 +1,4 @@
-package mongotesting
+package mongotest
 
 import (
 	"context"
@@ -7,12 +7,15 @@ import (
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	"testing"
 )
 
 const (
 	image         = "mongo"
 	containerPort = "27017/tcp"
+	containerName = "mongo_test"
 )
 
 // RunWithMongoInDocker runs the tests with
@@ -41,7 +44,7 @@ func RunWithMongoInDocker(m *testing.M, mongoURI *string) int {
 				},
 			},
 		},
-	}, nil, nil, "mongo_test")
+	}, nil, nil, containerName)
 	if err != nil {
 		panic(err)
 	}
@@ -74,4 +77,13 @@ func RunWithMongoInDocker(m *testing.M, mongoURI *string) int {
 	*mongoURI = fmt.Sprintf("mongodb://%s:%s", hostIP, hostPort)
 
 	return m.Run()
+}
+
+// NewObjID produces the mongodb ObjectID.
+func NewObjID(hex string) primitive.ObjectID {
+	objID, err := primitive.ObjectIDFromHex(hex)
+	if err != nil {
+		log.Fatalf("create ObjectID failed: %v", err)
+	}
+	return objID
 }
