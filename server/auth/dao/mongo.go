@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"time"
 )
 
 // Mongo defines a mongo dao.
@@ -31,7 +32,7 @@ func (m *Mongo) ResolveAccountID(ctx context.Context, openID string) (string, er
 	}
 	update := bson.M{
 		"$setOnInsert": bson.M{
-			"_id":     m.objID,
+			"_id":     primitive.NewObjectIDFromTimestamp(time.Now()),
 			"open_id": openID,
 		},
 	}
