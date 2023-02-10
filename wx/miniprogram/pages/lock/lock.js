@@ -1,6 +1,7 @@
 "use strict";
 // pages/lock/lock.ts
 Object.defineProperty(exports, "__esModule", { value: true });
+const trip_1 = require("../../service/trip");
 const routing_1 = require("../../utils/routing");
 // 全局变量
 const shareLocationKey = "shareLocation";
@@ -54,6 +55,31 @@ Page({
                     avatarUrl: this.data.shareLocation
                         ? this.data.avatarUrl : '',
                 });
+                // 向后台发送请求创建行程
+                trip_1.TripService.CreateTrip({
+                    name: 'test',
+                });
+                return;
+                // 显示开锁中提示框
+                wx.showLoading({
+                    title: '开锁中',
+                    mask: true,
+                });
+                // 模拟创建行程ID
+                const tripID = 'trip123456';
+                // 模拟两秒钟后开锁完成，跳转到行程页面
+                setTimeout(() => {
+                    wx.redirectTo({
+                        // url: `/pages/driving/driving?trip_id=${tripID}`
+                        url: routing_1.routing.drving({
+                            trip_id: tripID,
+                        }),
+                        // 不管成功或者失败都要取消开锁中提示
+                        complete: () => {
+                            wx.hideLoading();
+                        }
+                    });
+                }, 2000);
             },
             fail: () => {
                 wx.showToast({
@@ -62,25 +88,5 @@ Page({
                 });
             },
         });
-        // 显示开锁中提示框
-        wx.showLoading({
-            title: '开锁中',
-            mask: true,
-        });
-        // 模拟创建行程ID
-        const tripID = 'trip123456';
-        // 模拟两秒钟后开锁完成，跳转到行程页面
-        setTimeout(() => {
-            wx.redirectTo({
-                // url: `/pages/driving/driving?trip_id=${tripID}`
-                url: routing_1.routing.drving({
-                    trip_id: tripID,
-                }),
-                // 不管成功或者失败都要取消开锁中提示
-                complete: () => {
-                    wx.hideLoading();
-                }
-            });
-        }, 2000);
     },
 });
