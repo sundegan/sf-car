@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	authpb "sfcar/auth/api/gen/v1"
+	rentalpb "sfcar/rental/api/gen/v1"
 )
 
 func main() {
@@ -17,7 +18,9 @@ func main() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	// GRPC-Gateway将RPC转为JSON时，使用原始字段名、枚举变量使用枚举值表示
+	// When GRPC-Gateway converts RPC to JSON,
+	// the original field name is used and the
+	// enumeration variable is represented by the enumeration value.
 	mux := runtime.NewServeMux(runtime.WithMarshalerOption(
 		runtime.MIMEWildcard, &runtime.JSONPb{
 			MarshalOptions: protojson.MarshalOptions{
@@ -29,18 +32,30 @@ func main() {
 	))
 
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	// 将具体的GPRC服务注册到GRPC-Gateway代理服务器
+
+	// Register the authorization GRPC service to the GRPC-Gateway proxy server.
 	err := authpb.RegisterAuthServiceHandlerFromEndpoint(
 		ctx,
 		mux,
-		"localhost:8081", // GRPC服务的地址
-		opts,             // 连接配置，只能是切片类型
+		"localhost:8081", // The address of the Auth GRPC service
+		opts,             // Connection configuration
 	)
 	if err != nil {
-		log.Fatalf("failed register auth GPRC server to the GRPC-Gateway: %v", err)
+		log.Fatalf("failed register Auth GPRC server to the GRPC-Gateway: %v", err)
 	}
 
-	// 启动GRPC-Gateway代理服务器,地址为8080
+	// Register the Trip GRPC service to the GRPC-Gateway proxy server.
+	err = rentalpb.RegisterTripServiceHandlerFromEndpoint(
+		ctx,
+		mux,
+		"localhost:8082", // The address of the Trip GRPC service
+		opts,             // Connection configuration
+	)
+	if err != nil {
+		log.Fatalf("failed register Trip GPRC server to the GRPC-Gateway: %v", err)
+	}
+
+	// Start the GRPC-Gateway proxy server at port 8080.
 	err = http.ListenAndServe(":8080", mux)
 	if err != nil {
 		log.Fatal(err)
