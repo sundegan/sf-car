@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"sfcar/internal/auth_util"
 	rentalpb "sfcar/rental/api/gen/v1"
 	"sfcar/rental/trip"
 )
@@ -23,7 +24,14 @@ func main() {
 		logger.Fatal("failed listen at tcp:8082", zap.Error(err))
 	}
 
-	s := grpc.NewServer()
+	// Get the interceptor from auth_util package.
+	in, err := auth_util.Interceptor("internal/auth_util/public.key")
+	if err != nil {
+		logger.Fatal("cannot create auth interceptor", zap.Error(err))
+	}
+	// Install the Token interceptor.
+	s := grpc.NewServer(grpc.UnaryInterceptor(in))
+
 	rentalpb.RegisterTripServiceServer(s, &trip.Service{
 		Logger: logger,
 	})

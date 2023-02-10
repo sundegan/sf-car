@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
-	mongotest "sfcar/internal/mongo"
+	mongotest "sfcar/internal/mongo_util"
 	"testing"
 )
 

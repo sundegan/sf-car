@@ -30,7 +30,7 @@ export const rental = $root.rental = (() => {
              * Properties of a CreateTripRequest.
              * @memberof rental.v1
              * @interface ICreateTripRequest
-             * @property {string|null} [accountId] CreateTripRequest accountId
+             * @property {string|null} [name] CreateTripRequest name
              */
 
             /**
@@ -49,12 +49,12 @@ export const rental = $root.rental = (() => {
             }
 
             /**
-             * CreateTripRequest accountId.
-             * @member {string} accountId
+             * CreateTripRequest name.
+             * @member {string} name
              * @memberof rental.v1.CreateTripRequest
              * @instance
              */
-            CreateTripRequest.prototype.accountId = "";
+            CreateTripRequest.prototype.name = "";
 
             /**
              * Creates a CreateTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -68,8 +68,8 @@ export const rental = $root.rental = (() => {
                 if (object instanceof $root.rental.v1.CreateTripRequest)
                     return object;
                 let message = new $root.rental.v1.CreateTripRequest();
-                if (object.accountId != null)
-                    message.accountId = String(object.accountId);
+                if (object.name != null)
+                    message.name = String(object.name);
                 return message;
             };
 
@@ -87,9 +87,9 @@ export const rental = $root.rental = (() => {
                     options = {};
                 let object = {};
                 if (options.defaults)
-                    object.accountId = "";
-                if (message.accountId != null && message.hasOwnProperty("accountId"))
-                    object.accountId = message.accountId;
+                    object.name = "";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
                 return object;
             };
 

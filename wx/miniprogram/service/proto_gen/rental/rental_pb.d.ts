@@ -9,8 +9,8 @@ export namespace rental {
         /** Properties of a CreateTripRequest. */
         interface ICreateTripRequest {
 
-            /** CreateTripRequest accountId */
-            accountId?: (string|null);
+            /** CreateTripRequest name */
+            name?: (string|null);
         }
 
         /** Represents a CreateTripRequest. */
@@ -22,8 +22,8 @@ export namespace rental {
              */
             constructor(properties?: rental.v1.ICreateTripRequest);
 
-            /** CreateTripRequest accountId. */
-            public accountId: string;
+            /** CreateTripRequest name. */
+            public name: string;
 
             /**
              * Creates a CreateTripRequest message from a plain object. Also converts values to their respective internal types.

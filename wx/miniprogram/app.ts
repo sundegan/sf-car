@@ -45,7 +45,7 @@ App<IAppOption>({
                 url: 'http://localhost:8080/v1/trip', 
                 method: 'POST',
                 data: {
-                  accountId: '123456',
+                  name: 'test_interceptor',
                 } as rental.v1.ICreateTripRequest,
                 header: {
                   authorization: 'Bearer ' + loginResp.accessToken,
