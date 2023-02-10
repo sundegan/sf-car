@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 	"log"
@@ -13,10 +13,14 @@ import (
 )
 
 func main() {
-	fmt.Println("start GRPC-Gateway server...")
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
+
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		log.Fatalf("failed create zap logger: %v", err)
+	}
 
 	// When GRPC-Gateway converts RPC to JSON,
 	// the original field name is used and the
@@ -32,32 +36,42 @@ func main() {
 	))
 
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-
-	// Register the authorization GRPC service to the GRPC-Gateway proxy server.
-	err := authpb.RegisterAuthServiceHandlerFromEndpoint(
-		ctx,
-		mux,
-		"localhost:8081", // The address of the Auth GRPC service
-		opts,             // Connection configuration
-	)
-	if err != nil {
-		log.Fatalf("failed register Auth GPRC server to the GRPC-Gateway: %v", err)
+	grpcServers := []struct {
+		name         string
+		addr         string
+		registerFunc func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error)
+	}{
+		{
+			name:         "Auth GRPC Server",
+			addr:         "localhost:8081",
+			registerFunc: authpb.RegisterAuthServiceHandlerFromEndpoint,
+		},
+		{
+			name:         "Trip GRPC Server",
+			addr:         "localhost:8082",
+			registerFunc: rentalpb.RegisterTripServiceHandlerFromEndpoint,
+		},
 	}
 
-	// Register the Trip GRPC service to the GRPC-Gateway proxy server.
-	err = rentalpb.RegisterTripServiceHandlerFromEndpoint(
-		ctx,
-		mux,
-		"localhost:8082", // The address of the Trip GRPC service
-		opts,             // Connection configuration
-	)
-	if err != nil {
-		log.Fatalf("failed register Trip GPRC server to the GRPC-Gateway: %v", err)
+	for _, s := range grpcServers {
+		err := s.registerFunc(
+			ctx,
+			mux,
+			s.addr,
+			opts,
+		)
+		if err != nil {
+			logger.Sugar().Fatalf("cannot register %s to the GRPC-Gateway: %v", s.name, err)
+		} else {
+			logger.Sugar().Infof("Register the %s to the GRPC-gateway service", s.name)
+		}
 	}
 
 	// Start the GRPC-Gateway proxy server at port 8080.
-	err = http.ListenAndServe(":8080", mux)
+	addr := ":8080"
+	logger.Sugar().Infof("GRPC-Gateway Server started at %s", addr)
+	err = http.ListenAndServe(addr, mux)
 	if err != nil {
-		log.Fatal(err)
+		logger.Sugar().Fatal(err)
 	}
 }

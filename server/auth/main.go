@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -10,36 +9,31 @@ import (
 	"google.golang.org/grpc"
 	"io"
 	"log"
-	"net"
 	"os"
 	authpb "sfcar/auth/api/gen/v1"
 	"sfcar/auth/auth"
 	"sfcar/auth/dao"
 	"sfcar/auth/token"
 	"sfcar/auth/wechat"
+	"sfcar/internal/server"
 	"time"
 )
 
 // Register the auth service with GRPC and start the auth GRPC service.
 func main() {
-	fmt.Println("start Auth GRPC server...")
 	logger, err := zap.NewDevelopment()
 	if err != nil {
-		log.Fatalf("failed create logger: %v", err)
+		log.Fatalf("failed create zap logger: %v", err)
 	}
 
-	lis, err := net.Listen("tcp", ":8081")
-	if err != nil {
-		logger.Fatal("failed listen at tcp:8081", zap.Error(err))
-	}
-
+	// Create a MongoDB client.
 	ctx := context.Background()
 	mongoClient, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://admin:123456@localhost:27017"))
 	if err != nil {
 		logger.Fatal("connect to mondodb failed: %v", zap.Error(err))
 	}
 
-	// Get the appsecret from the local file.
+	// Get the AppS ecret from the local file.
 	appSecretFile, err := os.Open("auth/appsecret.txt")
 	if err != nil {
 		logger.Fatal("cannot open appsecret.txt file", zap.Error(err))
@@ -64,24 +58,28 @@ func main() {
 		log.Fatalf("cannot parse private key: %v", err)
 	}
 
-	s := grpc.NewServer()
-	authpb.RegisterAuthServiceServer(s, &auth.Service{
-		OpenIDResolver: &wechat.Service{
-			AppID:     "wx2574ac10292f87b5",
-			AppSecret: appSecret,
+	err = server.RunGRPCServer(&server.GRPCConfig{
+		Name: "Auth GRPC Server",
+		Addr: ":8081",
+		RegisterFunc: func(s *grpc.Server) {
+			authpb.RegisterAuthServiceServer(s, &auth.Service{
+				OpenIDResolver: &wechat.Service{
+					AppID:     "wx2574ac10292f87b5",
+					AppSecret: appSecret,
+				},
+				Mongo:  dao.NewMongo(mongoClient.Database("sfcar")),
+				Logger: logger,
+				TokenGenerator: &token.JWTTokenGen{
+					PrivateKey: privateKey,
+					Issuer:     "sfcar/auth",
+					IssuedAt:   time.Now(),
+				},
+				TokenExpire: 2 * time.Hour,
+			})
 		},
-		Mongo:  dao.NewMongo(mongoClient.Database("sfcar")),
 		Logger: logger,
-		TokenGenerator: &token.JWTTokenGen{
-			PrivateKey: privateKey,
-			Issuer:     "sfcar/auth",
-			IssuedAt:   time.Now(),
-		},
-		TokenExpire: 2 * time.Hour,
 	})
-
-	err = s.Serve(lis)
 	if err != nil {
-		logger.Fatal("failed start Auth GRPC server", zap.Error(err))
+		logger.Fatal("failed start Auth GRPC Server", zap.Error(err))
 	}
 }
