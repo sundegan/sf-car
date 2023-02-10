@@ -22,7 +22,7 @@ import (
 
 // Register the auth service with GRPC and start the auth GRPC service.
 func main() {
-	fmt.Println("start GRPC server...")
+	fmt.Println("start Auth GRPC server...")
 	logger, err := zap.NewDevelopment()
 	if err != nil {
 		log.Fatalf("failed create logger: %v", err)
@@ -82,6 +82,6 @@ func main() {
 
 	err = s.Serve(lis)
 	if err != nil {
-		logger.Fatal("failed start server", zap.Error(err))
+		logger.Fatal("failed start Auth GRPC server", zap.Error(err))
 	}
 }
