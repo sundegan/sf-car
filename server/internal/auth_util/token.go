@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"sfcar/internal/id"
 )
 
 // JWTTokenVerifier verifies jwt access tokens.
@@ -12,7 +13,7 @@ type JWTTokenVerifier struct {
 }
 
 // Verify verifies a token and returns account id.
-func (v *JWTTokenVerifier) Verify(token string) (string, error) {
+func (v *JWTTokenVerifier) Verify(token string) (id.AccountID, error) {
 	t, err := jwt.ParseWithClaims(token, &jwt.StandardClaims{},
 		func(*jwt.Token) (interface{}, error) {
 			return v.PublicKey, nil
@@ -34,5 +35,5 @@ func (v *JWTTokenVerifier) Verify(token string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("claims not valid: %v", err)
 	}
-	return claims.Audience, nil
+	return id.AccountID(claims.Audience), nil
 }

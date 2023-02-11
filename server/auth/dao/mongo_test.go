@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
+	"sfcar/internal/id"
 	mgutil "sfcar/internal/mongo_util"
 	"testing"
 )
@@ -24,11 +25,11 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 	// Inserting initial data into mongodb.
 	_, err = m.col.InsertMany(ctx, []interface{}{
 		bson.M{
-			"_id":     mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81901"),
+			"_id":     id.NewObjIDFormHex("63e26d0625d9b723e3f81901"),
 			"open_id": "openid_1",
 		},
 		bson.M{
-			"_id":     mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81902"),
+			"_id":     id.NewObjIDFormHex("63e26d0625d9b723e3f81902"),
 			"open_id": "openid_2",
 		},
 	})
@@ -37,7 +38,7 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 	}
 
 	// This Object ID is used when new data are inserted.
-	mgutil.ChangeToFromHex("63e26d0625d9b723e3f81900")
+	id.ChangeToFromHex("63e26d0625d9b723e3f81900")
 
 	// Table-driven testing
 	cases := []struct {
@@ -69,7 +70,7 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 			if err != nil {
 				t.Errorf("failed resolve account id from %q: %v", c.openID, err)
 			}
-			if id != c.want {
+			if id.String() != c.want {
 				t.Errorf("resolve account id error: want: %q, got: %q", c.want, id)
 			}
 		})

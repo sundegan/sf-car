@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	mgutil "sfcar/internal/mongo_util"
+	"sfcar/internal/id"
 )
 
 // Mongo defines a mongo dao.
@@ -23,9 +23,9 @@ func NewMongo(db *mongo.Database) *Mongo {
 }
 
 // ResolveAccountID retrieves the AccountID from OpenID.
-func (m *Mongo) ResolveAccountID(ctx context.Context, openID string) (string, error) {
+func (m *Mongo) ResolveAccountID(ctx context.Context, openID string) (id.AccountID, error) {
 	opts := options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After)
-	newObjID := mgutil.NewObjID()
+	newObjID := id.NewObjID()
 	filter := bson.M{
 		"open_id": openID,
 	}
@@ -53,5 +53,5 @@ func (m *Mongo) ResolveAccountID(ctx context.Context, openID string) (string, er
 	if err != nil {
 		return "", fmt.Errorf("failed to Decode res: %v", err)
 	}
-	return row.ID.Hex(), nil
+	return id.ToAccountID(row.ID), nil
 }

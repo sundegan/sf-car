@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 	"io"
 	"os"
+	"sfcar/internal/id"
 	"strings"
 )
 
@@ -20,7 +21,7 @@ const (
 )
 
 type tokenVerifier interface {
-	Verify(token string) (string, error)
+	Verify(token string) (id.AccountID, error)
 }
 
 type interceptor struct {
@@ -62,7 +63,7 @@ func (i *interceptor) HandleReq(ctx context.Context, req interface{}, info *grpc
 	if err != nil {
 		return nil, status.Errorf(codes.Unauthenticated, "token invalid: %v", err)
 	}
-	return handler(ContextWithAccountID(ctx, AccountID(accountID)), req)
+	return handler(ContextWithAccountID(ctx, accountID), req)
 }
 
 // tokenFromContext Get the token from the passed Context.
@@ -86,23 +87,16 @@ func tokenFromContext(ctx context.Context) (string, error) {
 
 type accountIDKey struct{}
 
-// AccountID defines account id object.
-type AccountID string
-
-func (a AccountID) String() string {
-	return string(a)
-}
-
 // ContextWithAccountID creates a context with given accountID.
-func ContextWithAccountID(ctx context.Context, accountID AccountID) context.Context {
+func ContextWithAccountID(ctx context.Context, accountID id.AccountID) context.Context {
 	return context.WithValue(ctx, accountIDKey{}, accountID)
 }
 
 // AccountIDFromContext gets account id from context.
 // Returns Unauthenticated error if no account id in the context.
-func AccountIDFromContext(ctx context.Context) (AccountID, error) {
+func AccountIDFromContext(ctx context.Context) (id.AccountID, error) {
 	v := ctx.Value(accountIDKey{})
-	accountID, ok := v.(AccountID)
+	accountID, ok := v.(id.AccountID)
 	if !ok {
 		return "", status.Errorf(codes.Unauthenticated, "")
 	}
