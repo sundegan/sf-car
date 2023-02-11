@@ -24,15 +24,24 @@ type UpdatedAtField struct {
 }
 
 // NewObjID generates a new object id.
+// By default, it generates id based on the current time.
+// If you need to, you can change the way of the id generation.
 var NewObjID = primitive.NewObjectID
 
-// NewObjIDFormHex generates a object id from Hex string.
+// NewObjIDFormHex generates an object id from Hex string.
 func NewObjIDFormHex(hex string) primitive.ObjectID {
 	objID, err := primitive.ObjectIDFromHex(hex)
 	if err != nil {
 		log.Fatalf("create ObjectID failed: %v", err)
 	}
 	return objID
+}
+
+// ChangeToFromHex change the way of objectID generation to NewObjIDFormHex().
+func ChangeToFromHex(hex string) {
+	NewObjID = func() primitive.ObjectID {
+		return NewObjIDFormHex(hex)
+	}
 }
 
 // UpdatedAt returns a value suitable for UpdatedAt field.

@@ -19,7 +19,6 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("connect to mondodb failed: %v", err)
 	}
-	client.Database("sfcar")
 	m := NewMongo(client.Database("sfcar"))
 
 	// Inserting initial data into mongodb.
@@ -37,8 +36,8 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 		log.Fatalf("cannot insert initial values: %v", err)
 	}
 
-	// This objID is used when new data are inserted.
-	m.objID = mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81900")
+	// This Object ID is used when new data are inserted.
+	mgutil.ChangeToFromHex("63e26d0625d9b723e3f81900")
 
 	// Table-driven testing
 	cases := []struct {
