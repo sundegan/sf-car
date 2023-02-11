@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
-	mongotest "sfcar/internal/mongo_util"
+	mgutil "sfcar/internal/mongo_util"
 	"testing"
 )
 
@@ -25,11 +25,11 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 	// Inserting initial data into mongodb.
 	_, err = m.col.InsertMany(ctx, []interface{}{
 		bson.M{
-			"_id":     mongotest.NewObjID("63e26d0625d9b723e3f81901"),
+			"_id":     mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81901"),
 			"open_id": "openid_1",
 		},
 		bson.M{
-			"_id":     mongotest.NewObjID("63e26d0625d9b723e3f81902"),
+			"_id":     mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81902"),
 			"open_id": "openid_2",
 		},
 	})
@@ -38,7 +38,7 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 	}
 
 	// This objID is used when new data are inserted.
-	m.objID = mongotest.NewObjID("63e26d0625d9b723e3f81900")
+	m.objID = mgutil.NewObjIDFormHex("63e26d0625d9b723e3f81900")
 
 	// Table-driven testing
 	cases := []struct {
@@ -78,5 +78,5 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mongotest.RunWithMongoInDocker(m, &mongodbURI))
+	os.Exit(mgutil.RunWithMongoInDocker(m, &mongodbURI))
 }
