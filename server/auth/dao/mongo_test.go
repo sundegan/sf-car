@@ -3,8 +3,6 @@ package dao
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
 	"sfcar/internal/id"
@@ -12,11 +10,9 @@ import (
 	"testing"
 )
 
-var mongodbURI string // mongodb connection URI
-
 func TestMongo_ResolveAccountID(t *testing.T) {
 	ctx := context.Background()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongodbURI))
+	client, err := mgutil.NewClient(ctx)
 	if err != nil {
 		t.Fatalf("connect to mondodb failed: %v", err)
 	}
@@ -78,5 +74,5 @@ func TestMongo_ResolveAccountID(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	os.Exit(mgutil.RunWithMongoInDocker(m, &mongodbURI))
+	os.Exit(mgutil.RunWithMongoInDocker(m))
 }
