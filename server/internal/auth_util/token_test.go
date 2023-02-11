@@ -77,7 +77,7 @@ func TestJWTTokenVerifier_Verify(t *testing.T) {
 				t.Errorf("want error; got no error")
 			}
 
-			if accountID != c.want {
+			if accountID.String() != c.want {
 				t.Errorf("wrong account id.\n want: %q,\n got: %q", c.want, accountID)
 			}
 		})

@@ -52,7 +52,7 @@ func (s *Service) Login(ctx context.Context, request *authpb.LoginRequest) (*aut
 
 	// Generate a token for a specific account
 	// and return it in the response.
-	token, err := s.TokenGenerator.GenerateToken(accountID, s.TokenExpire)
+	token, err := s.TokenGenerator.GenerateToken(accountID.String(), s.TokenExpire)
 	if err != nil {
 		s.Logger.Error("cannot generate token", zap.Error(err))
 		return nil, status.Error(codes.Internal, "")
