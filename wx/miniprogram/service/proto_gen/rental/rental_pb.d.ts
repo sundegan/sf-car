@@ -207,6 +207,9 @@ export namespace rental {
 
             /** Trip status */
             status?: (rental.v1.TripStatus|null);
+
+            /** Trip identityId */
+            identityId?: (string|null);
         }
 
         /** Represents a Trip. */
@@ -235,6 +238,9 @@ export namespace rental {
 
             /** Trip status. */
             public status: rental.v1.TripStatus;
+
+            /** Trip identityId. */
+            public identityId: string;
 
             /**
              * Creates a Trip message from a plain object. Also converts values to their respective internal types.

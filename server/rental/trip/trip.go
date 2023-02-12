@@ -16,13 +16,25 @@ type Service struct {
 	Logger         *zap.Logger
 	Mongo          *dao.Mongo
 	ProfileManager ProfileManager
+	CarManager     CarManager
+	POIManager     POIManager
 	*rentalpb.UnimplementedTripServiceServer
 }
 
 // ProfileManager defines the ACL for profile verification logic.
 type ProfileManager interface {
-	// Verify verifies that the account is eligible to create a trip.
-	Verify(context.Context, id.AccountID) error
+	Verify(context.Context, id.AccountID) (id.IdentityID, error)
+}
+
+// CarManager defines the ACL for car management.
+type CarManager interface {
+	Verify(context.Context, id.CarID, *rentalpb.Location) error
+	Unlock(context.Context, id.CarID) error
+}
+
+// POIManager queries for the current landmark.
+type POIManager interface {
+	Resolve(ctx context.Context, location *rentalpb.Location) (string, error)
 }
 
 // CreateTrip creates a trip.
@@ -32,9 +44,53 @@ func (s *Service) CreateTrip(ctx context.Context, request *rentalpb.CreateTripRe
 		return nil, err
 	}
 	// Verify driver's license identity.
-	s.ProfileManager.Verify(ctx, accountID)
-	s.Logger.Info("create trip", zap.String("account_id", accountID.String()))
-	return nil, status.Error(codes.Unimplemented, "")
+	identityID, err := s.ProfileManager.Verify(ctx, accountID)
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+
+	// Check the car status.
+	carID := id.CarID(request.CarId)
+	err = s.CarManager.Verify(ctx, carID, request.Start)
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, err.Error())
+	}
+
+	// Create the trip record and write it to the database.
+	poi, err := s.POIManager.Resolve(ctx, request.Start)
+	if err != nil {
+		s.Logger.Info("cannot resolve poi", zap.Stringer("location", request.Start))
+	}
+	ls := &rentalpb.LocationStatus{
+		Location: request.Start,
+		PoiName:  poi,
+	}
+	trip, err := s.Mongo.CreateTrip(ctx, &rentalpb.Trip{
+		AccountId:  accountID.String(),
+		CarId:      carID.String(),
+		IdentityId: identityID.String(),
+		Status:     rentalpb.TripStatus_IN_PROGRESS,
+		Start:      ls,
+		Current:    ls,
+	})
+	if err != nil {
+		s.Logger.Warn("cannot create trip", zap.Error(err))
+		return nil, status.Error(codes.AlreadyExists, "")
+	}
+	s.Logger.Info("create trip", zap.String("trip_id", trip.ID.String()))
+
+	// Unlock the car in background.
+	go func() {
+		err = s.CarManager.Unlock(context.Background(), carID)
+		if err != nil {
+			s.Logger.Error("cannot unlock car", zap.Error(err))
+		}
+	}()
+
+	return &rentalpb.TripEntity{
+		Id:   trip.ID.Hex(),
+		Trip: trip.Trip,
+	}, nil
 }
 
 func (s *Service) GetTrip(ctx context.Context, req *rentalpb.GetTripRequest) (*rentalpb.Trip, error) {

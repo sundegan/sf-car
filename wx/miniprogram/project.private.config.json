@@ -32,7 +32,7 @@
         {
           "name": "",
           "pathName": "pages/lock/lock",
-          "query": "",
+          "query": "car_id=123",
           "launchMode": "default",
           "scene": null
         },

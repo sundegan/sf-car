@@ -1,5 +1,6 @@
 // pages/lock/lock.ts
 
+import { rental } from "../../service/proto_gen/rental/rental_pb"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -7,7 +8,7 @@ import { routing } from "../../utils/routing"
 const shareLocationKey = "shareLocation"
 
 Page({
-  carID: undefined as undefined | string,
+  carID: '',
 
   data: {
     avatarUrl: '',        // 用户头像URL
@@ -19,8 +20,7 @@ Page({
   // 从index页面获取扫码的carID
   async onLoad(opt: Record<'car_id', string>) {
     const o: routing.LockOpts = opt
-    // 从扫码页面获取传递过来的carID
-    console.log('unlocking car', o.car_id)
+    // 从扫码页面获取传递过来的car_id参数
     this.carID = o.car_id
     const avatarUrl = wx.getStorageSync('avatarUrl')
     this.setData({
@@ -51,7 +51,7 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       // 模拟向服务器发送位置位置信息、头像链接、汽车ID
-      success: res => {
+      success: async res => {
         console.log('starting a trip', {
           location: {
             latitude: res.latitude,
@@ -63,9 +63,21 @@ Page({
         })
 
         // 向后台发送请求创建行程
-        TripService.CreateTrip({
-          name: 'test', 
+        if (!this.carID) {
+          console.error('no car_id specified, please bring car_id parameter n the lock page')
+          return
+        }
+        const trip = await TripService.CreateTrip({
+          carId: this.carID,
+          start: {
+            latitude: res.latitude,
+            longitude: res.longitude,
+          }
         })
+        if (!trip.id) {
+          console.error('no tripID in response', trip)
+          return
+        }
 
         // 显示开锁中提示框
         wx.showLoading({
@@ -73,14 +85,12 @@ Page({
           mask: true,
         })
 
-        // 模拟创建行程ID
-        const tripID = 'trip123456'
         // 模拟两秒钟后开锁完成，跳转到行程页面
         setTimeout(() => {
           wx.redirectTo({
             // url: `/pages/driving/driving?trip_id=${tripID}`
             url: routing.drving({
-              trip_id: tripID,
+              trip_id: trip.id!,
             }), 
             // 不管成功或者失败都要取消开锁中提示
             complete: () => {

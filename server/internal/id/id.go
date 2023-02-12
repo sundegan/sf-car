@@ -20,6 +20,20 @@ func (t TripID) String() string {
 	return string(t)
 }
 
+// IdentityID defines identity id object.
+type IdentityID string
+
+func (i IdentityID) String() string {
+	return string(i)
+}
+
+// CarID defines car id object.
+type CarID string
+
+func (c CarID) String() string {
+	return string(c)
+}
+
 // ObjIDFromID converts an id to mongodb object id.
 func ObjIDFromID(id fmt.Stringer) (primitive.ObjectID, error) {
 	return primitive.ObjectIDFromHex(id.String())
