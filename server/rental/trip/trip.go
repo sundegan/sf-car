@@ -43,6 +43,7 @@ func (s *Service) CreateTrip(ctx context.Context, request *rentalpb.CreateTripRe
 	if err != nil {
 		return nil, err
 	}
+
 	// Verify driver's license identity.
 	identityID, err := s.ProfileManager.Verify(ctx, accountID)
 	if err != nil {
@@ -65,7 +66,7 @@ func (s *Service) CreateTrip(ctx context.Context, request *rentalpb.CreateTripRe
 		Location: request.Start,
 		PoiName:  poi,
 	}
-	trip, err := s.Mongo.CreateTrip(ctx, &rentalpb.Trip{
+	tr, err := s.Mongo.CreateTrip(ctx, &rentalpb.Trip{
 		AccountId:  accountID.String(),
 		CarId:      carID.String(),
 		IdentityId: identityID.String(),
@@ -77,7 +78,7 @@ func (s *Service) CreateTrip(ctx context.Context, request *rentalpb.CreateTripRe
 		s.Logger.Warn("cannot create trip", zap.Error(err))
 		return nil, status.Error(codes.AlreadyExists, "")
 	}
-	s.Logger.Info("create trip", zap.String("trip_id", trip.ID.String()))
+	s.Logger.Info("create trip", zap.String("trip_id", tr.ID.String()))
 
 	// Unlock the car in background.
 	go func() {
@@ -88,17 +89,42 @@ func (s *Service) CreateTrip(ctx context.Context, request *rentalpb.CreateTripRe
 	}()
 
 	return &rentalpb.TripEntity{
-		Id:   trip.ID.Hex(),
-		Trip: trip.Trip,
+		Id:   tr.ID.Hex(),
+		Trip: tr.Trip,
 	}, nil
 }
 
 func (s *Service) GetTrip(ctx context.Context, req *rentalpb.GetTripRequest) (*rentalpb.Trip, error) {
-	return nil, nil
+	accountID, err := auth_util.AccountIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	tr, err := s.Mongo.GetTrip(ctx, id.TripID(req.Id), accountID)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "")
+	}
+	return tr.Trip, nil
 }
 
 func (s *Service) GetTrips(ctx context.Context, req *rentalpb.GetTripsRequest) (*rentalpb.GetTripsResponse, error) {
-	return nil, nil
+	accountID, err := auth_util.AccountIDFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+	trips, err := s.Mongo.GetTrips(ctx, accountID, req.Status)
+	if err != nil {
+		s.Logger.Error("cannot get trips", zap.Error(err))
+		return nil, status.Error(codes.Internal, "")
+	}
+	res := &rentalpb.GetTripsResponse{}
+	for _, tr := range trips {
+		res.Trips = append(res.Trips, &rentalpb.TripEntity{
+			Id:   tr.ID.Hex(),
+			Trip: tr.Trip,
+		})
+	}
+	return res, nil
 }
 
 func (s *Service) UpdateTrip(ctx context.Context, req *rentalpb.UpdateTripRequest) (*rentalpb.Trip, error) {

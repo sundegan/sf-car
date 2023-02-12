@@ -1,3 +1,5 @@
+import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
 interface Trip {
@@ -82,6 +84,8 @@ Page({
   },
 
   async onLoad() {
+    const res = await TripService.getTrips(rental.v1.TripStatus.FINISHED)
+
     this.populateTrips()  // 生成随机行程数据
     const avatarUrl = wx.getStorageSync('avatarUrl')
     this.setData({

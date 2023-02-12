@@ -1,3 +1,4 @@
+import { TripService } from "../../service/trip"
 import { formatDuration, formatFee } from "../../utils/format"
 import { routing } from "../../utils/routing"
 
@@ -25,6 +26,7 @@ Page({
   onLoad(opt: Record<'trip_id', string>) {
     const o: routing.DrivingOpts = opt
     console.log('current trip_id', o.trip_id)
+    TripService.GetTrip(o.trip_id).then(console.log)
     this.setupLocationUpdator()
     this.setupTimer()
   },

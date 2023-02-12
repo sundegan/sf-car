@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const trip_1 = require("../../service/trip");
 const format_1 = require("../../utils/format");
 const routing_1 = require("../../utils/routing");
 const centPerSec = 1; // 每秒一分钱
@@ -23,6 +24,7 @@ Page({
     onLoad(opt) {
         const o = opt;
         console.log('current trip_id', o.trip_id);
+        trip_1.TripService.GetTrip(o.trip_id).then(console.log);
         this.setupLocationUpdator();
         this.setupTimer();
     },
