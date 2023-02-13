@@ -147,6 +147,7 @@ export const rental = $root.rental = (() => {
              * @property {number|null} [feeCent] LocationStatus feeCent
              * @property {number|null} [drivenKm] LocationStatus drivenKm
              * @property {string|null} [poiName] LocationStatus poiName
+             * @property {number|Long|null} [timestampSec] LocationStatus timestampSec
              */
 
             /**
@@ -197,6 +198,14 @@ export const rental = $root.rental = (() => {
             LocationStatus.prototype.poiName = "";
 
             /**
+             * LocationStatus timestampSec.
+             * @member {number|Long} timestampSec
+             * @memberof rental.v1.LocationStatus
+             * @instance
+             */
+            LocationStatus.prototype.timestampSec = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
              * Creates a LocationStatus message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
              * @memberof rental.v1.LocationStatus
@@ -214,11 +223,20 @@ export const rental = $root.rental = (() => {
                     message.location = $root.rental.v1.Location.fromObject(object.location);
                 }
                 if (object.feeCent != null)
-                    message.feeCent = object.feeCent | 0;
+                    message.feeCent = Number(object.feeCent);
                 if (object.drivenKm != null)
                     message.drivenKm = Number(object.drivenKm);
                 if (object.poiName != null)
                     message.poiName = String(object.poiName);
+                if (object.timestampSec != null)
+                    if ($util.Long)
+                        (message.timestampSec = $util.Long.fromValue(object.timestampSec)).unsigned = false;
+                    else if (typeof object.timestampSec === "string")
+                        message.timestampSec = parseInt(object.timestampSec, 10);
+                    else if (typeof object.timestampSec === "number")
+                        message.timestampSec = object.timestampSec;
+                    else if (typeof object.timestampSec === "object")
+                        message.timestampSec = new $util.LongBits(object.timestampSec.low >>> 0, object.timestampSec.high >>> 0).toNumber();
                 return message;
             };
 
@@ -240,15 +258,25 @@ export const rental = $root.rental = (() => {
                     object.feeCent = 0;
                     object.drivenKm = 0;
                     object.poiName = "";
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, false);
+                        object.timestampSec = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.timestampSec = options.longs === String ? "0" : 0;
                 }
                 if (message.location != null && message.hasOwnProperty("location"))
                     object.location = $root.rental.v1.Location.toObject(message.location, options);
                 if (message.feeCent != null && message.hasOwnProperty("feeCent"))
-                    object.feeCent = message.feeCent;
+                    object.feeCent = options.json && !isFinite(message.feeCent) ? String(message.feeCent) : message.feeCent;
                 if (message.drivenKm != null && message.hasOwnProperty("drivenKm"))
                     object.drivenKm = options.json && !isFinite(message.drivenKm) ? String(message.drivenKm) : message.drivenKm;
                 if (message.poiName != null && message.hasOwnProperty("poiName"))
                     object.poiName = message.poiName;
+                if (message.timestampSec != null && message.hasOwnProperty("timestampSec"))
+                    if (typeof message.timestampSec === "number")
+                        object.timestampSec = options.longs === String ? String(message.timestampSec) : message.timestampSec;
+                    else
+                        object.timestampSec = options.longs === String ? $util.Long.prototype.toString.call(message.timestampSec) : options.longs === Number ? new $util.LongBits(message.timestampSec.low >>> 0, message.timestampSec.high >>> 0).toNumber() : message.timestampSec;
                 return object;
             };
 

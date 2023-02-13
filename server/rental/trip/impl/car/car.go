@@ -19,3 +19,8 @@ func (m *Manager) Verify(ctx context.Context, id id.CarID, location *rentalpb.Lo
 func (m *Manager) Unlock(ctx context.Context, id id.CarID) error {
 	return nil
 }
+
+// Lock locks a car.
+func (m *Manager) Lock(ctx context.Context, cid id.CarID) error {
+	return nil
+}

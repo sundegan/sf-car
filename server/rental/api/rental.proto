@@ -9,9 +9,10 @@ message Location {
 
 message LocationStatus {
   Location location = 1;
-  int32 fee_cent = 2;
+  double fee_cent = 2;
   double driven_km = 3;
   string poi_name = 4;
+  int64 timestamp_sec = 5;
 }
 
 enum TripStatus {
