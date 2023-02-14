@@ -11,16 +11,17 @@ import (
 type JWTTokenGen struct {
 	PrivateKey *rsa.PrivateKey
 	Issuer     string
-	IssuedAt   time.Time
+	IssuedAt   func() time.Time
 }
 
 // GenerateToken generates a token.
 func (j *JWTTokenGen) GenerateToken(accountID string, expire time.Duration) (string, error) {
-	// Create the Claims
+	nowSec := j.IssuedAt().Unix()
+	// Create the Claims.
 	claims := jwt.StandardClaims{
 		Issuer:    j.Issuer,
-		IssuedAt:  j.IssuedAt.Unix(),
-		ExpiresAt: j.IssuedAt.Unix() + int64(expire.Seconds()),
+		IssuedAt:  nowSec,
+		ExpiresAt: nowSec + int64(expire.Seconds()),
 		Audience:  accountID,
 	}
 	// Create tokens without carrying a signature.

@@ -34,8 +34,7 @@ type TokenGenerator interface {
 // Login return the response to WeChat mini-program,the response contain
 // openid,session_key.
 func (s *Service) Login(ctx context.Context, request *authpb.LoginRequest) (*authpb.LoginResponse, error) {
-	s.Logger.Info("received code",
-		zap.String("code", request.Code))
+	s.Logger.Info("received code", zap.String("code", request.Code))
 
 	openID, err := s.OpenIDResolver.Resolve(request.Code)
 	if err != nil {

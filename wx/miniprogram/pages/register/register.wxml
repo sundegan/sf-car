@@ -1,0 +1,63 @@
+<view class="container padding-top-xl">
+    <!-- 当没有上传过驾驶证照片显示上传驾驶证照片操作 -->
+    <view class="lic-tmpl" wx:if="{{!licImgURL}}" bindtap="onUploadLic">
+        <image src="/resources/lic-model.png" class="lic-tmpl-img"/>
+        <view class="cuIcon-camerafill lg text-gray"></view>
+        <view class="instruction">请上传驾驶证照片</view>
+    </view>
+
+    <!-- 上传过驾驶证照片则显示驾驶证照片和注册信息 -->
+    <block wx:else>
+        <view class="lic-tmpl">
+            <image class="stretch" src="{{licImgURL}}"/>
+            <image wx:if="{{state==='VERIFIED'}}" class="check-img" src="/resources/check.png" />
+        </view>
+
+        <!-- 注册表单 -->
+        <form class="lic-form  margin-top-xl">
+            <view class="cu-form-group">
+                <view class="title">姓名</view>
+                <input placeholder="姓名" model:value="{{name}}" disabled="{{state!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">性别</view>
+                <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genders}}" disabled="{{state!=='UNSUBMITTED'}}">
+                    <view class="picker">
+                        {{genders[genderIndex]}}
+                    </view>
+                </picker>
+            
+            </view>
+            <view class="cu-form-group">
+                <view class="title">驾驶证号</view>
+                <input placeholder="驾驶证号" model:value="{{licNo}}" disabled="{{state!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">手机号码</view>
+                <input placeholder="手机号码" model:value="{{phone}}" disabled="{{state!=='UNSUBMITTED'}}"/>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">出生日期</view>
+                <picker bindchange="onBirthDateChange" mode="date" value="{{birthDate}}" disabled="{{state!=='UNSUBMITTED'}}">
+                    <view class="picker">
+                        {{birthDate}}
+                    </view>
+                </picker>
+            </view>
+            <button wx:if="{{state ==='UNSUBMITTED'}}" 
+                class="cu-btn block bg-blue margin-top-xl lg"
+                bindtap="onSubmit">
+                提交审核
+            </button>
+            <button wx:if="{{state ==='PENDING'}}"
+                class="cu-btn block line-blue margin-top-xl lg" disabled>
+                正在审核中
+            </button>
+            <button wx:if="{{state ==='VERIFIED'}}"
+                class="cu-btn block bg-blue margin-top-xl lg"
+                bindtap="onResubmit">
+                重新审核
+            </button>
+        </form> 
+    </block>
+</view>

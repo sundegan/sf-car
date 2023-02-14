@@ -1,0 +1,44 @@
+.lic-tmpl {
+    width: 600rpx;
+    height: 450rpx;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.instruction {
+    position: absolute;
+    bottom: -60rpx;
+}
+
+.cuIcon-camerafill {
+    font-size: 170rpx;
+    position: absolute;
+    opacity: 0.6;
+}
+
+.stretch {
+    width: 100%;
+    height: 100%;
+}
+
+.lic-form {
+    width: 600rpx;
+}
+
+/* 使表单输入框对齐 */
+.cu-form-group .title {
+    min-width: calc(4em + 30rpx);
+}
+
+/* 审核通过后在驾驶证照片上打钩 */
+.check-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150rpx;
+    height: 150rpx;
+    opacity: 0.8;
+}

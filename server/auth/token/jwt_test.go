@@ -43,7 +43,9 @@ func TestJWTTokenGen_GenerateToken(t *testing.T) {
 	g := &JWTTokenGen{
 		PrivateKey: privateKey,
 		Issuer:     "sfcar/auth",
-		IssuedAt:   time.Unix(1516239022, 0),
+		IssuedAt: func() time.Time {
+			return time.Unix(1516239022, 0)
+		},
 	}
 	token, err := g.GenerateToken("63e26d0625d9b723e3f81900", time.Minute)
 	if err != nil {

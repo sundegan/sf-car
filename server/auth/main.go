@@ -72,7 +72,7 @@ func main() {
 				TokenGenerator: &token.JWTTokenGen{
 					PrivateKey: privateKey,
 					Issuer:     "sfcar/auth",
-					IssuedAt:   time.Now(),
+					IssuedAt:   time.Now,
 				},
 				TokenExpire: 2 * time.Hour,
 			})
