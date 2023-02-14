@@ -1,5 +1,6 @@
 import { ProfileService } from "../../service/ profile"
 import { rental } from "../../service/proto_gen/rental/rental_pb"
+import { sfcar } from "../../service/request"
 import { padString } from "../../utils/format"
 import { routing } from "../../utils/routing"
 
@@ -24,16 +25,22 @@ Page({
     birthDate: '1990-01-01',
     licImgURL: '',
     state: rental.v1.IdentityStatus[rental.v1.IdentityStatus.UNSUBMITTED],
-},
+  },
   
   renderProfile(p: rental.v1.IProfile) {
+    this.renderIdentity(p.identity!)
     this.setData({
-      licNo: p.identity?.licNumber || '',
-      name: p.identity?.name || '',
-      genderIndex: p.identity?.gender || 0,
-      birthDate: formatDate(p.identity?.birthDateMillis || 0),
       state: rental.v1.IdentityStatus[p.identityStatus || 0],
-    })
+    }) 
+  },
+
+  renderIdentity(i?: rental.v1.IIdentity) {
+    this.setData({
+      licNo: i?.licNumber || '',
+      name: i?.name || '',
+      genderIndex: i?.gender || 0,
+      birthDate: formatDate(i?.birthDateMillis || 0),
+    }) 
   },
 
   onLoad(opt: Record<'redirect', string>) {
@@ -41,27 +48,41 @@ Page({
     if (o.redirect) {
       this.redirectURL = decodeURIComponent(o.redirect)
     }
+    // 获取身份认证信息和驾照图片信息
     ProfileService.getProfile().then(p => this.renderProfile(p))
+    ProfileService.getProfilePhoto().then(p => {
+      console.log(p.url)
+      this.setData({
+        licImgURL: p.url || '',
+      })
+    })
   },
 
   // 上传驾驶证照片
   onUploadLic() {
     wx.chooseMedia({
-      success: res => {
+      success: async res => {
+        if (res.tempFiles.length === 0) {
+          return 
+        }
         this.setData({
-            licImgURL: res.tempFiles[0].tempFilePath,
+          licImgURL: res.tempFiles[0].tempFilePath,
         })
-        // TODO: 上传图片到服务器存储
-        // 服务器返回name,gender,licID等信息,自动填写这些信息
-        setTimeout(() => {
-          this.setData({
-            name: '张三',
-            genderIndex: 1,
-            licNo: '123456',
-            phone: '123456',
-            birthDate: '1990-01-01',
-          })
-        }, 1000);
+        // 获取图片上传地址（预签名URL）
+        const photoRes = await ProfileService.createProfilePhoto()
+        console.log(photoRes)
+        // 上传图片(如果上传地址不为空)
+        if (!photoRes.uploadUrl) {
+          return
+        }
+        await sfcar.uploadfile({
+          localPath: res.tempFiles[0].tempFilePath,
+          url: photoRes.uploadUrl,
+        })
+        // 上传完成通知服务器上传成功,服务器返回身份信息
+        const identity = await ProfileService.completeProfilePhoto()
+        // 保存身份信息到本地
+        this.renderIdentity(identity)
       }
     })
   },
@@ -119,9 +140,15 @@ Page({
     this.clearProfileRefresher() 
   }, 
 
-  // 重新审核处理函数
+  // 重新审核按钮处理函数
   onResubmit() {
+    // 重新提交审核时清理之前上传的图片
     ProfileService.clearProfile().then(p => this.renderProfile(p))
+    ProfileService.clearProfilePhoto().then(() => {
+      this.setData({
+          licImgURL: '',
+      })
+    })
   },
 
   // 服务器审核结束处理函数

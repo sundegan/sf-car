@@ -150,8 +150,6 @@ Page({
         },
         fail: () => {},
       })
-
-      return
     }
     wx.scanCode({
       success: async () => {
@@ -183,12 +181,6 @@ Page({
           })
         }
       },
-      fail: () => {
-        wx.showToast({
-          icon: 'none',
-          title: '扫码失败!',
-        })
-      }
     })
   },
 

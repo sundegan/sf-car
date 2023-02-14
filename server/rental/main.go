@@ -6,7 +6,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	blobpb "sfcar/blob/api/gen/v1"
 	"sfcar/internal/server"
 	rentalpb "sfcar/rental/api/gen/v1"
 	"sfcar/rental/profile"
@@ -16,6 +18,7 @@ import (
 	"sfcar/rental/trip/impl/car"
 	"sfcar/rental/trip/impl/poi"
 	aclpr "sfcar/rental/trip/impl/profile"
+	"time"
 )
 
 // Register the auth service with GRPC and start the auth GRPC service.
@@ -32,26 +35,36 @@ func main() {
 	}
 	db := mongoClient.Database("sfcar")
 
+	blobConn, err := grpc.Dial("localhost:8083", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("cannot connect blob service", zap.Error(err))
+	}
+	profileService := &profile.Service{
+		BlobClient:        blobpb.NewBlobServiceClient(blobConn),
+		PhotoGetExpire:    20 * time.Second,
+		PhotoUploadExpire: 20 * time.Second,
+		Mongo:             prdao.NewMongo(db),
+		Logger:            logger,
+	}
 	err = server.RunGRPCServer(&server.GRPCConfig{
-		Name:          "Trip GRPC Server",
+		Name:          "Trip and Profile GRPC Server",
 		Addr:          ":8082",
 		PublicKeyFile: "internal/auth_util/public.key",
 		RegisterFunc: func(s *grpc.Server) {
 			rentalpb.RegisterTripServiceServer(s, &trip.Service{
-				Logger:         logger,
-				CarManager:     &car.Manager{},
-				ProfileManager: &aclpr.Manager{},
-				POIManager:     &poi.Manager{},
-				Mongo:          trdao.NewMongo(db),
+				Logger:     logger,
+				CarManager: &car.Manager{},
+				ProfileManager: &aclpr.Manager{
+					Fetcher: profileService,
+				},
+				POIManager: &poi.Manager{},
+				Mongo:      trdao.NewMongo(db),
 			})
-			rentalpb.RegisterProfileServiceServer(s, &profile.Service{
-				Mongo:  prdao.NewMongo(db),
-				Logger: logger,
-			})
+			rentalpb.RegisterProfileServiceServer(s, profileService)
 		},
 		Logger: logger,
 	})
 	if err != nil {
-		logger.Fatal("failed start Trip GRPC Server", zap.Error(err))
+		logger.Fatal("failed start Trip and Profile GRPC Server", zap.Error(err))
 	}
 }

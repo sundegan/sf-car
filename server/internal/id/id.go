@@ -34,6 +34,13 @@ func (c CarID) String() string {
 	return string(c)
 }
 
+// BlobID defines blob id object.
+type BlobID string
+
+func (b BlobID) String() string {
+	return string(b)
+}
+
 // ObjIDFromID converts an id to mongodb object id.
 func ObjIDFromID(id fmt.Stringer) (primitive.ObjectID, error) {
 	return primitive.ObjectIDFromHex(id.String())

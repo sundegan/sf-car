@@ -92,7 +92,6 @@ export namespace sfcar {
     // 登录请求
     export async function login() {
         // 客户端对Token进行验证,如果Token有效则直接发送业务请求到服务器
-        console.log('now', Date.now(), 'expireMs:', authData.expireMs)
         if (authData.token && authData.expireMs >= Date.now()) {
             
             return 
@@ -121,6 +120,31 @@ export namespace sfcar {
         return new Promise((resolve, reject) => {
             wx.login({
                 success: resolve,
+                fail: reject,
+            })
+        })
+    }
+
+    export interface UploadFileOpts {
+        localPath: string
+        url: string
+    }
+    
+    // 驾照图片上传服务
+    export function uploadfile(o: UploadFileOpts): Promise<void> {
+        const data = wx.getFileSystemManager().readFileSync(o.localPath)
+        return new Promise((resolve, reject) => {
+            wx.request({
+                method: 'PUT',
+                url: o.url,
+                data: data,
+                success: res => {
+                    if (res.statusCode >= 400) {
+                        reject(res)
+                    } else {
+                        resolve()
+                    }
+                },
                 fail: reject,
             })
         })

@@ -852,6 +852,312 @@ export namespace rental {
             public static getTypeUrl(typeUrlPrefix?: string): string;
         }
 
+        /** Properties of a GetProfilePhotoRequest. */
+        interface IGetProfilePhotoRequest {
+        }
+
+        /** Represents a GetProfilePhotoRequest. */
+        class GetProfilePhotoRequest implements IGetProfilePhotoRequest {
+
+            /**
+             * Constructs a new GetProfilePhotoRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IGetProfilePhotoRequest);
+
+            /**
+             * Creates a GetProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GetProfilePhotoRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.GetProfilePhotoRequest;
+
+            /**
+             * Creates a plain object from a GetProfilePhotoRequest message. Also converts values to other types if specified.
+             * @param message GetProfilePhotoRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.GetProfilePhotoRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GetProfilePhotoRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for GetProfilePhotoRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a GetProfilePhotoResponse. */
+        interface IGetProfilePhotoResponse {
+
+            /** GetProfilePhotoResponse url */
+            url?: (string|null);
+        }
+
+        /** Represents a GetProfilePhotoResponse. */
+        class GetProfilePhotoResponse implements IGetProfilePhotoResponse {
+
+            /**
+             * Constructs a new GetProfilePhotoResponse.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IGetProfilePhotoResponse);
+
+            /** GetProfilePhotoResponse url. */
+            public url: string;
+
+            /**
+             * Creates a GetProfilePhotoResponse message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GetProfilePhotoResponse
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.GetProfilePhotoResponse;
+
+            /**
+             * Creates a plain object from a GetProfilePhotoResponse message. Also converts values to other types if specified.
+             * @param message GetProfilePhotoResponse
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.GetProfilePhotoResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GetProfilePhotoResponse to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for GetProfilePhotoResponse
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a CreateProfilePhotoRequest. */
+        interface ICreateProfilePhotoRequest {
+        }
+
+        /** Represents a CreateProfilePhotoRequest. */
+        class CreateProfilePhotoRequest implements ICreateProfilePhotoRequest {
+
+            /**
+             * Constructs a new CreateProfilePhotoRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.ICreateProfilePhotoRequest);
+
+            /**
+             * Creates a CreateProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateProfilePhotoRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.CreateProfilePhotoRequest;
+
+            /**
+             * Creates a plain object from a CreateProfilePhotoRequest message. Also converts values to other types if specified.
+             * @param message CreateProfilePhotoRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.CreateProfilePhotoRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateProfilePhotoRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for CreateProfilePhotoRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a CreateProfilePhotoResponse. */
+        interface ICreateProfilePhotoResponse {
+
+            /** CreateProfilePhotoResponse uploadUrl */
+            uploadUrl?: (string|null);
+        }
+
+        /** Represents a CreateProfilePhotoResponse. */
+        class CreateProfilePhotoResponse implements ICreateProfilePhotoResponse {
+
+            /**
+             * Constructs a new CreateProfilePhotoResponse.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.ICreateProfilePhotoResponse);
+
+            /** CreateProfilePhotoResponse uploadUrl. */
+            public uploadUrl: string;
+
+            /**
+             * Creates a CreateProfilePhotoResponse message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateProfilePhotoResponse
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.CreateProfilePhotoResponse;
+
+            /**
+             * Creates a plain object from a CreateProfilePhotoResponse message. Also converts values to other types if specified.
+             * @param message CreateProfilePhotoResponse
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.CreateProfilePhotoResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateProfilePhotoResponse to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for CreateProfilePhotoResponse
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a CompleteProfilePhotoRequest. */
+        interface ICompleteProfilePhotoRequest {
+        }
+
+        /** Represents a CompleteProfilePhotoRequest. */
+        class CompleteProfilePhotoRequest implements ICompleteProfilePhotoRequest {
+
+            /**
+             * Constructs a new CompleteProfilePhotoRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.ICompleteProfilePhotoRequest);
+
+            /**
+             * Creates a CompleteProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CompleteProfilePhotoRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.CompleteProfilePhotoRequest;
+
+            /**
+             * Creates a plain object from a CompleteProfilePhotoRequest message. Also converts values to other types if specified.
+             * @param message CompleteProfilePhotoRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.CompleteProfilePhotoRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CompleteProfilePhotoRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for CompleteProfilePhotoRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a ClearProfilePhotoRequest. */
+        interface IClearProfilePhotoRequest {
+        }
+
+        /** Represents a ClearProfilePhotoRequest. */
+        class ClearProfilePhotoRequest implements IClearProfilePhotoRequest {
+
+            /**
+             * Constructs a new ClearProfilePhotoRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IClearProfilePhotoRequest);
+
+            /**
+             * Creates a ClearProfilePhotoRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ClearProfilePhotoRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.ClearProfilePhotoRequest;
+
+            /**
+             * Creates a plain object from a ClearProfilePhotoRequest message. Also converts values to other types if specified.
+             * @param message ClearProfilePhotoRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.ClearProfilePhotoRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ClearProfilePhotoRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for ClearProfilePhotoRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a ClearProfilePhotoResponse. */
+        interface IClearProfilePhotoResponse {
+        }
+
+        /** Represents a ClearProfilePhotoResponse. */
+        class ClearProfilePhotoResponse implements IClearProfilePhotoResponse {
+
+            /**
+             * Constructs a new ClearProfilePhotoResponse.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IClearProfilePhotoResponse);
+
+            /**
+             * Creates a ClearProfilePhotoResponse message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ClearProfilePhotoResponse
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.ClearProfilePhotoResponse;
+
+            /**
+             * Creates a plain object from a ClearProfilePhotoResponse message. Also converts values to other types if specified.
+             * @param message ClearProfilePhotoResponse
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.ClearProfilePhotoResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ClearProfilePhotoResponse to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for ClearProfilePhotoResponse
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
         /** Represents a ProfileService */
         class ProfileService extends $protobuf.rpc.Service {
 
@@ -904,6 +1210,62 @@ export namespace rental {
              * @returns Promise
              */
             public clearProfile(request: rental.v1.IClearProfileRequest): Promise<rental.v1.Profile>;
+
+            /**
+             * Calls GetProfilePhoto.
+             * @param request GetProfilePhotoRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and GetProfilePhotoResponse
+             */
+            public getProfilePhoto(request: rental.v1.IGetProfilePhotoRequest, callback: rental.v1.ProfileService.GetProfilePhotoCallback): void;
+
+            /**
+             * Calls GetProfilePhoto.
+             * @param request GetProfilePhotoRequest message or plain object
+             * @returns Promise
+             */
+            public getProfilePhoto(request: rental.v1.IGetProfilePhotoRequest): Promise<rental.v1.GetProfilePhotoResponse>;
+
+            /**
+             * Calls CreateProfilePhoto.
+             * @param request CreateProfilePhotoRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and CreateProfilePhotoResponse
+             */
+            public createProfilePhoto(request: rental.v1.ICreateProfilePhotoRequest, callback: rental.v1.ProfileService.CreateProfilePhotoCallback): void;
+
+            /**
+             * Calls CreateProfilePhoto.
+             * @param request CreateProfilePhotoRequest message or plain object
+             * @returns Promise
+             */
+            public createProfilePhoto(request: rental.v1.ICreateProfilePhotoRequest): Promise<rental.v1.CreateProfilePhotoResponse>;
+
+            /**
+             * Calls CompleteProfilePhoto.
+             * @param request CompleteProfilePhotoRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and Identity
+             */
+            public completeProfilePhoto(request: rental.v1.ICompleteProfilePhotoRequest, callback: rental.v1.ProfileService.CompleteProfilePhotoCallback): void;
+
+            /**
+             * Calls CompleteProfilePhoto.
+             * @param request CompleteProfilePhotoRequest message or plain object
+             * @returns Promise
+             */
+            public completeProfilePhoto(request: rental.v1.ICompleteProfilePhotoRequest): Promise<rental.v1.Identity>;
+
+            /**
+             * Calls ClearProfilePhoto.
+             * @param request ClearProfilePhotoRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and ClearProfilePhotoResponse
+             */
+            public clearProfilePhoto(request: rental.v1.IClearProfilePhotoRequest, callback: rental.v1.ProfileService.ClearProfilePhotoCallback): void;
+
+            /**
+             * Calls ClearProfilePhoto.
+             * @param request ClearProfilePhotoRequest message or plain object
+             * @returns Promise
+             */
+            public clearProfilePhoto(request: rental.v1.IClearProfilePhotoRequest): Promise<rental.v1.ClearProfilePhotoResponse>;
         }
 
         namespace ProfileService {
@@ -928,6 +1290,34 @@ export namespace rental {
              * @param [response] Profile
              */
             type ClearProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#getProfilePhoto}.
+             * @param error Error, if any
+             * @param [response] GetProfilePhotoResponse
+             */
+            type GetProfilePhotoCallback = (error: (Error|null), response?: rental.v1.GetProfilePhotoResponse) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#createProfilePhoto}.
+             * @param error Error, if any
+             * @param [response] CreateProfilePhotoResponse
+             */
+            type CreateProfilePhotoCallback = (error: (Error|null), response?: rental.v1.CreateProfilePhotoResponse) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#completeProfilePhoto}.
+             * @param error Error, if any
+             * @param [response] Identity
+             */
+            type CompleteProfilePhotoCallback = (error: (Error|null), response?: rental.v1.Identity) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#clearProfilePhoto}.
+             * @param error Error, if any
+             * @param [response] ClearProfilePhotoResponse
+             */
+            type ClearProfilePhotoCallback = (error: (Error|null), response?: rental.v1.ClearProfilePhotoResponse) => void;
         }
     }
 }

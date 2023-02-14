@@ -15,6 +15,7 @@ const (
 	accountIDField      = "accountid"
 	profileField        = "profile"
 	identityStatusField = profileField + ".identitystatus"
+	photoBlobIDField    = "photoblobid"
 )
 
 // Mongo defines a mongo dao.
@@ -31,8 +32,9 @@ func NewMongo(db *mongo.Database) *Mongo {
 
 // ProfileRecord defines the profile record in db.
 type ProfileRecord struct {
-	AccountID string            `bson:"accountid"`
-	Profile   *rentalpb.Profile `bson:"profile"`
+	AccountID   string            `bson:"accountid"`
+	Profile     *rentalpb.Profile `bson:"profile"`
+	PhotoBlobID string            `bson:"photoblobid"`
 }
 
 // GetProfile gets profile for an account.
@@ -61,6 +63,18 @@ func (m *Mongo) UpdateProfile(c context.Context, aid id.AccountID, prevState ren
 	_, err := m.col.UpdateOne(c, filter, mgutil.Set(bson.M{
 		accountIDField: aid.String(),
 		profileField:   p,
+	}), options.Update().SetUpsert(true))
+	return err
+}
+
+// UpdateProfilePhoto updates profile photo blob id.
+func (m *Mongo) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
+	filter := bson.M{
+		accountIDField: aid.String(),
+	}
+	_, err := m.col.UpdateOne(c, filter, mgutil.Set(bson.M{
+		accountIDField:   aid.String(),
+		photoBlobIDField: bid.String(),
 	}), options.Update().SetUpsert(true))
 	return err
 }
