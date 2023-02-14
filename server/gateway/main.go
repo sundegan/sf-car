@@ -51,6 +51,11 @@ func main() {
 			addr:         "localhost:8082",
 			registerFunc: rentalpb.RegisterTripServiceHandlerFromEndpoint,
 		},
+		{
+			name:         "Profile GRPC Server",
+			addr:         "localhost:8082",
+			registerFunc: rentalpb.RegisterProfileServiceHandlerFromEndpoint,
+		},
 	}
 
 	for _, s := range grpcServers {

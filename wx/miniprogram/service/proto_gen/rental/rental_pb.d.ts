@@ -633,5 +633,301 @@ export namespace rental {
              */
             type UpdateTripCallback = (error: (Error|null), response?: rental.v1.Trip) => void;
         }
+
+        /** Gender enum. */
+        enum Gender {
+            G_NOT_SPECIFIED = 0,
+            MALE = 1,
+            FEMALE = 2
+        }
+
+        /** IdentityStatus enum. */
+        enum IdentityStatus {
+            UNSUBMITTED = 0,
+            PENDING = 1,
+            VERIFIED = 2
+        }
+
+        /** Properties of a Profile. */
+        interface IProfile {
+
+            /** Profile identity */
+            identity?: (rental.v1.IIdentity|null);
+
+            /** Profile identityStatus */
+            identityStatus?: (rental.v1.IdentityStatus|null);
+        }
+
+        /** Represents a Profile. */
+        class Profile implements IProfile {
+
+            /**
+             * Constructs a new Profile.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IProfile);
+
+            /** Profile identity. */
+            public identity?: (rental.v1.IIdentity|null);
+
+            /** Profile identityStatus. */
+            public identityStatus: rental.v1.IdentityStatus;
+
+            /**
+             * Creates a Profile message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Profile
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.Profile;
+
+            /**
+             * Creates a plain object from a Profile message. Also converts values to other types if specified.
+             * @param message Profile
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.Profile, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Profile to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for Profile
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of an Identity. */
+        interface IIdentity {
+
+            /** Identity licNumber */
+            licNumber?: (string|null);
+
+            /** Identity name */
+            name?: (string|null);
+
+            /** Identity gender */
+            gender?: (rental.v1.Gender|null);
+
+            /** Identity birthDateMillis */
+            birthDateMillis?: (number|Long|null);
+        }
+
+        /** Represents an Identity. */
+        class Identity implements IIdentity {
+
+            /**
+             * Constructs a new Identity.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IIdentity);
+
+            /** Identity licNumber. */
+            public licNumber: string;
+
+            /** Identity name. */
+            public name: string;
+
+            /** Identity gender. */
+            public gender: rental.v1.Gender;
+
+            /** Identity birthDateMillis. */
+            public birthDateMillis: (number|Long);
+
+            /**
+             * Creates an Identity message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Identity
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.Identity;
+
+            /**
+             * Creates a plain object from an Identity message. Also converts values to other types if specified.
+             * @param message Identity
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.Identity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Identity to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for Identity
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a GetProfileRequest. */
+        interface IGetProfileRequest {
+        }
+
+        /** Represents a GetProfileRequest. */
+        class GetProfileRequest implements IGetProfileRequest {
+
+            /**
+             * Constructs a new GetProfileRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IGetProfileRequest);
+
+            /**
+             * Creates a GetProfileRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GetProfileRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.GetProfileRequest;
+
+            /**
+             * Creates a plain object from a GetProfileRequest message. Also converts values to other types if specified.
+             * @param message GetProfileRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.GetProfileRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GetProfileRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for GetProfileRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Properties of a ClearProfileRequest. */
+        interface IClearProfileRequest {
+        }
+
+        /** Represents a ClearProfileRequest. */
+        class ClearProfileRequest implements IClearProfileRequest {
+
+            /**
+             * Constructs a new ClearProfileRequest.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: rental.v1.IClearProfileRequest);
+
+            /**
+             * Creates a ClearProfileRequest message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ClearProfileRequest
+             */
+            public static fromObject(object: { [k: string]: any }): rental.v1.ClearProfileRequest;
+
+            /**
+             * Creates a plain object from a ClearProfileRequest message. Also converts values to other types if specified.
+             * @param message ClearProfileRequest
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: rental.v1.ClearProfileRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ClearProfileRequest to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the default type url for ClearProfileRequest
+             * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns The default type url
+             */
+            public static getTypeUrl(typeUrlPrefix?: string): string;
+        }
+
+        /** Represents a ProfileService */
+        class ProfileService extends $protobuf.rpc.Service {
+
+            /**
+             * Constructs a new ProfileService service.
+             * @param rpcImpl RPC implementation
+             * @param [requestDelimited=false] Whether requests are length-delimited
+             * @param [responseDelimited=false] Whether responses are length-delimited
+             */
+            constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+            /**
+             * Calls GetProfile.
+             * @param request GetProfileRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and Profile
+             */
+            public getProfile(request: rental.v1.IGetProfileRequest, callback: rental.v1.ProfileService.GetProfileCallback): void;
+
+            /**
+             * Calls GetProfile.
+             * @param request GetProfileRequest message or plain object
+             * @returns Promise
+             */
+            public getProfile(request: rental.v1.IGetProfileRequest): Promise<rental.v1.Profile>;
+
+            /**
+             * Calls SubmitProfile.
+             * @param request Identity message or plain object
+             * @param callback Node-style callback called with the error, if any, and Profile
+             */
+            public submitProfile(request: rental.v1.IIdentity, callback: rental.v1.ProfileService.SubmitProfileCallback): void;
+
+            /**
+             * Calls SubmitProfile.
+             * @param request Identity message or plain object
+             * @returns Promise
+             */
+            public submitProfile(request: rental.v1.IIdentity): Promise<rental.v1.Profile>;
+
+            /**
+             * Calls ClearProfile.
+             * @param request ClearProfileRequest message or plain object
+             * @param callback Node-style callback called with the error, if any, and Profile
+             */
+            public clearProfile(request: rental.v1.IClearProfileRequest, callback: rental.v1.ProfileService.ClearProfileCallback): void;
+
+            /**
+             * Calls ClearProfile.
+             * @param request ClearProfileRequest message or plain object
+             * @returns Promise
+             */
+            public clearProfile(request: rental.v1.IClearProfileRequest): Promise<rental.v1.Profile>;
+        }
+
+        namespace ProfileService {
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#getProfile}.
+             * @param error Error, if any
+             * @param [response] Profile
+             */
+            type GetProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#submitProfile}.
+             * @param error Error, if any
+             * @param [response] Profile
+             */
+            type SubmitProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#clearProfile}.
+             * @param error Error, if any
+             * @param [response] Profile
+             */
+            type ClearProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+        }
     }
 }

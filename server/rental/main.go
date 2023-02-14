@@ -9,11 +9,13 @@ import (
 	"log"
 	"sfcar/internal/server"
 	rentalpb "sfcar/rental/api/gen/v1"
+	"sfcar/rental/profile"
+	prdao "sfcar/rental/profile/dao"
 	"sfcar/rental/trip"
-	"sfcar/rental/trip/dao"
+	trdao "sfcar/rental/trip/dao"
 	"sfcar/rental/trip/impl/car"
 	"sfcar/rental/trip/impl/poi"
-	"sfcar/rental/trip/impl/profile"
+	aclpr "sfcar/rental/trip/impl/profile"
 )
 
 // Register the auth service with GRPC and start the auth GRPC service.
@@ -28,6 +30,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("connect to mondodb failed: %v", zap.Error(err))
 	}
+	db := mongoClient.Database("sfcar")
 
 	err = server.RunGRPCServer(&server.GRPCConfig{
 		Name:          "Trip GRPC Server",
@@ -37,12 +40,15 @@ func main() {
 			rentalpb.RegisterTripServiceServer(s, &trip.Service{
 				Logger:         logger,
 				CarManager:     &car.Manager{},
-				ProfileManager: &profile.Manager{},
+				ProfileManager: &aclpr.Manager{},
 				POIManager:     &poi.Manager{},
-				Mongo:          dao.NewMongo(mongoClient.Database("sfcar")),
+				Mongo:          trdao.NewMongo(db),
+			})
+			rentalpb.RegisterProfileServiceServer(s, &profile.Service{
+				Mongo:  prdao.NewMongo(db),
+				Logger: logger,
 			})
 		},
-		Logger: logger,
 	})
 	if err != nil {
 		logger.Fatal("failed start Trip GRPC Server", zap.Error(err))
